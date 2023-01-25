@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-// import { PRODUCTS } from "../Products";
 
 export const ShopContext = createContext(null);
 
@@ -20,12 +19,13 @@ export const ShopContextProvider = (props) => {
   };
 
   const addTOCart = (data) => {
-    if (!cartItems.find((product) => product.id === Number(data.id))) {
+    if (!cartItems.find((obj) => obj.id === Number(data.id))) {
       const product = { ...data, number: 1 };
       cartItems.push(product);
       console.log(cartItems);
     } else {
       const productIndex = cartItems.findIndex((obj) => obj.id === data.id);
+      console.log("productIndex", productIndex);
       const ItemQuntity = cartItems[productIndex].number;
       console.log("productIndex", productIndex);
       const NewCartItem = cartItems.map((product) => {
