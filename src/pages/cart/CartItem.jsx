@@ -7,11 +7,11 @@ export const CartItem = (props) => {
 
   const { cartItems, removeFromCart, addTOCart, updateCartItemCount } =
     useContext(ShopContext);
-  const productIndex = cartItems.findIndex((obj) => obj.id == id);
+  const productIndex = cartItems.findIndex((obj) => obj.id === id);
 
   return (
     <div className="cartItem">
-      <img src={images[0]} />
+      <img src={images[0]} alt="Loading..." />
       <div className="description">
         <p>
           <b>{title}</b>

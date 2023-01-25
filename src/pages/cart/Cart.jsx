@@ -5,7 +5,8 @@ import "./cart.css";
 import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
-  const { cartItems, getTotalCartAmount } = useContext(ShopContext);
+  const { cartItems, getTotalCartAmount } =
+    useContext(ShopContext);
 
   const totalAmount = getTotalCartAmount();
 
@@ -22,7 +23,7 @@ export const Cart = () => {
         })}
       </div>
 
-      {totalAmount > 0 ? (
+      {cartItems.length > 0 ? (
         <div className="checkout">
           <p>SubTotal: $ {totalAmount}</p>
           <button onClick={() => navigate("/")}> Continue Shopping </button>

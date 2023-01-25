@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
+import FormList from "./components/FormList";
 import { Navbar } from "./components/Navbar";
 import { ShopContextProvider } from "./context/ShopContext";
 import { Cart } from "./pages/cart/Cart";
@@ -13,7 +14,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Shop />} />
-            <Route path="cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/form" element={<FormList />} />
           </Routes>
         </Router>
       </ShopContextProvider>

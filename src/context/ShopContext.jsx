@@ -5,6 +5,7 @@ export const ShopContext = createContext(null);
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const [responseData, setResponseData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
@@ -18,7 +19,19 @@ export const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  const addTOCart = (data) => {
+  const getTotalCartItem = () => {
+    let totalAmount = 0;
+    for (const item in cartItems) {
+      if (cartItems[item].number > 0) {
+        totalAmount += cartItems[item].number;
+        console.log(item);
+      }
+    }
+
+    return totalAmount;
+  };
+
+  const addTOCart = (data, ItemId) => {
     if (!cartItems.find((obj) => obj.id === Number(data.id))) {
       const product = { ...data, number: 1 };
       cartItems.push(product);
@@ -68,9 +81,11 @@ export const ShopContextProvider = (props) => {
   const ProductItem = async () => {
     try {
       const res = await fetch("https://dummyjson.com/products");
+      console.log("res", res);
       const data = await res.json();
       console.log("data", data);
       setResponseData(data);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -83,11 +98,13 @@ export const ShopContextProvider = (props) => {
   const contextValue = {
     responseData,
     cartItems,
+    isLoading,
     addTOCart,
     removeFromCart,
     updateCartItemCount,
     getTotalCartAmount,
     ProductItem,
+    getTotalCartItem,
   };
 
   return (

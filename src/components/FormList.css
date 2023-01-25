@@ -1,0 +1,9 @@
+.formList {
+  display: flex;
+  flex-direction: f;
+  margin: auto;
+  align-items: center;
+  width: 30px;
+  padding: 40px;
+  font-size: large;
+}
