@@ -31,7 +31,7 @@ export const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  const addTOCart = (data, ItemId) => {
+  const addTOCart = (data) => {
     if (!cartItems.find((obj) => obj.id === Number(data.id))) {
       const product = { ...data, number: 1 };
       cartItems.push(product);
@@ -91,8 +91,33 @@ export const ShopContextProvider = (props) => {
     }
   };
 
+  const SearchBar = async (Name) => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(
+        `https://dummyjson.com/products/search?q=${Name}`
+      );
+      const data = await res.json();
+      setResponseData(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const PagiNationItem = async (num) => {
+    try {
+      const res = await fetch(`https://dummyjson.com/products?limit=10&skip=${num}`);
+      const data = await res.json();
+      setResponseData(data);
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    ProductItem();
+    PagiNationItem();
   }, []);
 
   const contextValue = {
@@ -105,6 +130,8 @@ export const ShopContextProvider = (props) => {
     getTotalCartAmount,
     ProductItem,
     getTotalCartItem,
+    SearchBar,
+    PagiNationItem
   };
 
   return (
