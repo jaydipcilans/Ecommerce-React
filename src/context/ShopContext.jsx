@@ -1,49 +1,110 @@
-import React, { createContext, useState } from "react";
-import { PRODUCTS } from "../Products";
+import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
 
-const getDefaultCart = () => {
-  let cart = {};
-  for (let i = 1; i < PRODUCTS.length + 1; i++) {
-    cart[i] = 0;
-  }
-  return cart;
-};
-
 export const ShopContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState(getDefaultCart());
+  const [cartItems, setCartItems] = useState([]);
+  const [responseData, setResponseData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        let itemInfo = PRODUCTS.find((product) => product.id === Number(item));
-        totalAmount += cartItems[item] * itemInfo.price;
+      if (cartItems[item].number > 0) {
+        totalAmount += cartItems[item].number * cartItems[item].price;
+        console.log(item);
       }
     }
 
     return totalAmount;
   };
 
-  const addTOCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+  const getTotalCartItem = () => {
+    let totalAmount = 0;
+    for (const item in cartItems) {
+      if (cartItems[item].number > 0) {
+        totalAmount += cartItems[item].number;
+        console.log(item);
+      }
+    }
+
+    return totalAmount;
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+  const addTOCart = (data, ItemId) => {
+    if (!cartItems.find((obj) => obj.id === Number(data.id))) {
+      const product = { ...data, number: 1 };
+      cartItems.push(product);
+      console.log(cartItems);
+    } else {
+      const productIndex = cartItems.findIndex((obj) => obj.id === data.id);
+      console.log("productIndex", productIndex);
+      const ItemQuntity = cartItems[productIndex].number;
+      console.log("productIndex", productIndex);
+      const NewCartItem = cartItems.map((product) => {
+        if (product.id === data.id) {
+          return { ...product, number: ItemQuntity + 1 };
+        } else {
+          return product;
+        }
+      });
+
+      console.log(cartItems);
+      setCartItems(NewCartItem);
+    }
+  };
+
+  const removeFromCart = (data) => {
+    if (data.number === 0) {
+      const NewcartItem = cartItems.filter((item) => item.id !== data.id);
+
+      setCartItems(NewcartItem);
+    } else {
+      const productIndex = cartItems.findIndex((obj) => obj.id === data.id);
+      const ItemQuntity = cartItems[productIndex].number;
+      const newCartItem = cartItems.map((product) => {
+        if (product.id === data.id) {
+          return { ...product, number: ItemQuntity - 1 };
+        } else {
+          return product;
+        }
+      });
+      setCartItems(newCartItem);
+    }
   };
 
   const updateCartItemCount = (newAmount, itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
+    console.log(newAmount);
   };
 
+  const ProductItem = async () => {
+    try {
+      const res = await fetch("https://dummyjson.com/products");
+      console.log("res", res);
+      const data = await res.json();
+      console.log("data", data);
+      setResponseData(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    ProductItem();
+  }, []);
+
   const contextValue = {
+    responseData,
     cartItems,
+    isLoading,
     addTOCart,
     removeFromCart,
     updateCartItemCount,
     getTotalCartAmount,
+    ProductItem,
+    getTotalCartItem,
   };
 
   return (
