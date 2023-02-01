@@ -19,12 +19,33 @@ export const CartItem = (props) => {
         <p>$ {price}</p>
       </div>
       <div className="countHandler">
-        <button onClick={() => removeFromCart(props.data)}> - </button>
+        <button
+          onClick={() => removeFromCart(props.data)}
+          style={{
+            margin: "5px",
+            borderRadius: "5px",
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          -
+        </button>
         <input
           value={cartItems[productIndex].number}
           onChange={(e) => updateCartItemCount(Number(e.target.value))}
+          style={{ margin: "5px", border: "none" }}
         />
-        <button onClick={() => addTOCart(props.data)}> + </button>
+        <button
+          onClick={() => addTOCart(props.data)}
+          style={{
+            margin: "5px",
+            backgroundColor: "black",
+            borderRadius: "5px",
+            color: "white",
+          }}
+        >
+          +
+        </button>
       </div>
     </div>
   );
